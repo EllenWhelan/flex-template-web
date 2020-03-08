@@ -1,9 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { InlineTextButton } from '../../components';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
 import config from '../../config';
 
+import { PrimaryButton } from '../../components';
+import { addToFavorite } from './ListingPage.duck';
 import css from './ListingPage.css';
 
 const SectionHeading = props => {
@@ -15,6 +20,8 @@ const SectionHeading = props => {
     hostLink,
     showContactUser,
     onContactUser,
+    addToFavorite,
+    minderListingId
   } = props;
 
   const unitType = config.bookingUnitType;
@@ -26,6 +33,10 @@ const SectionHeading = props => {
     : isDaily
     ? 'ListingPage.perDay'
     : 'ListingPage.perUnit';
+
+  const handleFavoriteClick = () => {
+    addToFavorite(minderListingId)
+  }
 
   return (
     <div className={css.sectionHeading}>
@@ -39,6 +50,11 @@ const SectionHeading = props => {
       </div>
       <div className={css.heading}>
         <h1 className={css.title}>{richTitle}</h1>
+        <div>
+          <PrimaryButton onClick={handleFavoriteClick}>
+            <h3>Favorite</h3>
+          </PrimaryButton>
+        </div>
         <div className={css.author}>
           {category}
           <FormattedMessage id="ListingPage.hostedBy" values={{ name: hostLink }} />
@@ -56,4 +72,13 @@ const SectionHeading = props => {
   );
 };
 
-export default SectionHeading;
+const mapDispatchToProps = (dispatch) => {
+  return{
+    addToFavorite: (minderListingId) => dispatch(addToFavorite(minderListingId))
+  }
+}
+
+export default compose(
+  withRouter,
+  connect(null, mapDispatchToProps)
+)(SectionHeading);

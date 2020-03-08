@@ -33,6 +33,9 @@ export const SEND_ENQUIRY_REQUEST = 'app/ListingPage/SEND_ENQUIRY_REQUEST';
 export const SEND_ENQUIRY_SUCCESS = 'app/ListingPage/SEND_ENQUIRY_SUCCESS';
 export const SEND_ENQUIRY_ERROR = 'app/ListingPage/SEND_ENQUIRY_ERROR';
 
+export const ADD_TO_FAVORITE_SUCCESS = 'app/ListingPage/ADD_TO_FAVORITE_SUCCESS';
+export const ADD_TO_FAVORITE_ERROR = 'app/ListingPage/ADD_TO_FAVORITE_SUCCESS';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -79,6 +82,12 @@ const listingPageReducer = (state = initialState, action = {}) => {
     case SEND_ENQUIRY_ERROR:
       return { ...state, sendEnquiryInProgress: false, sendEnquiryError: payload };
 
+    case ADD_TO_FAVORITE_SUCCESS:
+      console.log('add to favorite success');
+      return { ...state }
+    case ADD_TO_FAVORITE_ERROR:
+      console.log('add to favorite error');
+      return { ...state }
     default:
       return state;
   }
@@ -287,3 +296,40 @@ export const loadData = (params, search) => dispatch => {
     return Promise.all([dispatch(showListing(listingId)), dispatch(fetchReviews(listingId))]);
   }
 };
+
+export const addToFavorite = (minderListingId) => (dispatch, getState, sdk) => {
+  // save minder to user document
+  sdk.currentUser.show().then(res => {
+    console.log(res.data.data.attributes.profile.publicData)
+    const oldFavoritesList = res.data.data.attributes.profile.publicData.favoritesList
+    let newFavoritesList = [minderListingId]
+    if (oldFavoritesList) {
+      if (oldFavoritesList.includes(minderListingId)) {
+        newFavoritesList = oldFavoritesList
+      } else {
+        oldFavoritesList.push(minderListingId)
+        newFavoritesList = oldFavoritesList
+      }
+    }
+    return newFavoritesList
+  }).then(newFavoritesList => {
+    console.log('updating favorites list...') 
+    sdk.currentUser.updateProfile({
+      publicData: {
+        favoritesList: newFavoritesList
+      }
+    }, {
+      expend: true
+    }).then(() => {
+      console.log(`minder added to list: ${minderListingId}`)
+      dispatch({ type: ADD_TO_FAVORITE_SUCCESS })
+    }).catch((err) => {
+      console.log(`error message: ${err}`)
+      dispatch({ type: ADD_TO_FAVORITE_ERROR })
+    })
+  }).then(() => {
+    console.log('current user fetched')
+  }).catch(err => {
+    dispatch({ type: ADD_TO_FAVORITE_ERROR })
+  })
+}

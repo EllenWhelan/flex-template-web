@@ -24,6 +24,7 @@ import {
   StyleguidePage,
   TermsOfServicePage,
   TransactionPage,
+  FavoritesPage
 } from './containers';
 
 // routeConfiguration needs to initialize containers first
@@ -319,6 +320,11 @@ const routeConfiguration = () => {
       path: '/notfound',
       name: 'NotFoundPage',
       component: props => <NotFoundPage {...props} />,
+    },
+    {
+      path: '/favorites',
+      name: 'FavoritesPage',
+      component: props => <FavoritesPage {...props} />
     },
 
     // Do not change this path!

@@ -138,7 +138,7 @@ export class SearchPageComponent extends Component {
       listings,
       location,
       mapListings,
-      onManageDisableScrolling,
+      onManageDisableScrolling, 
       pagination,
       scrollingDisabled,
       searchInProgress,
