@@ -297,17 +297,17 @@ export const loadData = (params, search) => dispatch => {
   }
 };
 
-export const addToFavorite = (minderListingId) => (dispatch, getState, sdk) => {
+export const addToFavorite = (minderId) => (dispatch, getState, sdk) => {
   // save minder to user document
   sdk.currentUser.show().then(res => {
-    console.log(res.data.data.attributes.profile.publicData)
     const oldFavoritesList = res.data.data.attributes.profile.publicData.favoritesList
-    let newFavoritesList = [minderListingId]
+    console.log(oldFavoritesList)
+    let newFavoritesList = [minderId]
     if (oldFavoritesList) {
-      if (oldFavoritesList.includes(minderListingId)) {
+      if (oldFavoritesList.includes(minderId)) {
         newFavoritesList = oldFavoritesList
       } else {
-        oldFavoritesList.push(minderListingId)
+        oldFavoritesList.push(minderId) 
         newFavoritesList = oldFavoritesList
       }
     }
@@ -321,7 +321,7 @@ export const addToFavorite = (minderListingId) => (dispatch, getState, sdk) => {
     }, {
       expend: true
     }).then(() => {
-      console.log(`minder added to list: ${minderListingId}`)
+      console.log(`minder added to list: ${minderId}`)
       dispatch({ type: ADD_TO_FAVORITE_SUCCESS })
     }).catch((err) => {
       console.log(`error message: ${err}`)

@@ -433,7 +433,7 @@ export class ListingPageComponent extends Component {
                     showContactUser={showContactUser}
                     onContactUser={this.onContactUser}
                     listingCategory={listingCategory}
-                    minderListingId={currentListing.id.uuid}
+                    minderId={currentListing.author.id.uuid}
                   />
                   <SectionDescriptionMaybe description={description} />
                   <SectionFeaturesMaybe options={filtersConfig} publicData={publicData} />

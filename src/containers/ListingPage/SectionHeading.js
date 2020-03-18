@@ -21,7 +21,7 @@ const SectionHeading = props => {
     showContactUser,
     onContactUser,
     addToFavorite,
-    minderListingId
+    minderId
   } = props;
 
   const unitType = config.bookingUnitType;
@@ -35,7 +35,7 @@ const SectionHeading = props => {
     : 'ListingPage.perUnit';
 
   const handleFavoriteClick = () => {
-    addToFavorite(minderListingId)
+    addToFavorite(minderId)
   }
 
   return (

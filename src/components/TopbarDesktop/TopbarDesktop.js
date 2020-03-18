@@ -108,11 +108,11 @@ const TopbarDesktop = props => {
         </MenuItem>
         <MenuItem key="FavoritesPage">
           <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('FavoritesPage'))}
+            className={classNames(css.favoritesLink, currentPageClass('FavoritesPage'))}
             name="FavoritesPage"
           >
             <span className={css.menuItemBorder} />
-            <h3>Favorites</h3>
+            <FormattedMessage id="TopbarDesktop.favoritesLink" defaultMessage="Favorites" />
           </NamedLink>
         </MenuItem>
         <MenuItem key="logout">

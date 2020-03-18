@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getFavoriteListings } from './FavoritesPage.duck';
+import { getListingsById } from '../../ducks/marketplaceData.duck';
 import { TopbarContainer } from '../../containers';
 import {
   LayoutSingleColumn,
@@ -22,7 +23,6 @@ class FavoritesPage extends Component {
 
     render() {
         const { listings } = this.props
-        // console.log(listings)
         return (
             <LayoutSingleColumn>
                 <LayoutWrapperTopbar>
@@ -45,9 +45,10 @@ class FavoritesPage extends Component {
 }
 
 const mapStateToProps = state => {
-    const { favoriteListings } = state.FavoritesPage
+    const { favoriteListingIds } = state.FavoritesPage
+    const listings = getListingsById(state, favoriteListingIds)
     return {
-        listings: favoriteListings
+        listings
     }
 }
 
