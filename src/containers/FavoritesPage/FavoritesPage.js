@@ -13,6 +13,8 @@ import {
   UserCard
 } from '../../components';
 
+import css from './FavoritesPage.css'
+
 
 class FavoritesPage extends Component {
     componentDidMount() {
@@ -22,17 +24,24 @@ class FavoritesPage extends Component {
 
     render() {
         const { favoriteMinders } = this.props
+        const onContactUser = () => {
+            return
+        }
         return (
             <LayoutSingleColumn>
                 <LayoutWrapperTopbar>
                 <TopbarContainer />
                 </LayoutWrapperTopbar>
-    
                 <LayoutWrapperMain>
-                    <h1>Favorite Minders</h1>
-                    { favoriteMinders.map(minder => {
-                        return <UserCard user={minder} key={minder.id.uuid} />
-                    }) }
+                    <div className={css.favoriteMinderList}>
+                        <h1>Favorite Minders</h1>
+                        { favoriteMinders.map(minder => {
+                            return <UserCard className={css.userCard} 
+                                            user={minder}
+                                            onContactUser={onContactUser}
+                                            key={minder.id.uuid} />
+                        }) }
+                    </div>
                 </LayoutWrapperMain>
     
                 <LayoutWrapperFooter>
