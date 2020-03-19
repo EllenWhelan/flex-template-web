@@ -1,5 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { InlineTextButton } from '../../components';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
 import config from '../../config';
@@ -15,6 +18,8 @@ const SectionHeading = props => {
     hostLink,
     showContactUser,
     onContactUser,
+    addToFavorite,
+    minderId
   } = props;
 
   const unitType = config.bookingUnitType;
@@ -26,6 +31,10 @@ const SectionHeading = props => {
     : isDaily
     ? 'ListingPage.perDay'
     : 'ListingPage.perUnit';
+
+  const handleFavoriteClick = () => {
+    addToFavorite(minderId)
+  }
 
   return (
     <div className={css.sectionHeading}>
@@ -55,5 +64,6 @@ const SectionHeading = props => {
     </div>
   );
 };
+
 
 export default SectionHeading;

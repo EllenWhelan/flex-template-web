@@ -24,3 +24,4 @@ export { default as TermsOfServicePage } from './TermsOfServicePage/TermsOfServi
 export { default as TopbarContainer } from './TopbarContainer/TopbarContainer';
 export { default as TransactionPage } from './TransactionPage/TransactionPage';
 export { default as PartnersPage } from './PartnersPage/PartnersPage';
+export { default as FavoritesPage } from './FavoritesPage/FavoritesPage';

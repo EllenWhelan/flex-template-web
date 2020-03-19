@@ -138,7 +138,7 @@ export class SearchPageComponent extends Component {
       listings,
       location,
       mapListings,
-      onManageDisableScrolling,
+      onManageDisableScrolling, 
       pagination,
       scrollingDisabled,
       searchInProgress,
@@ -318,7 +318,7 @@ const mapStateToProps = state => {
     state,
     unionWith(currentPageResultIds, searchMapListingIds, (id1, id2) => id1.uuid === id2.uuid)
   );
-
+  
   return {
     listings: pageListings,
     mapListings,

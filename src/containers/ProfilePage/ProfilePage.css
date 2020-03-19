@@ -40,6 +40,32 @@
   }
 }
 
+.favoriteButton {
+  background: pink;
+  color: white;
+  text-align: center;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin: 30px 50px 0 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  @media (--viewportLarge) {
+    margin: 0 96px 44px 0;
+  }
+}
+
+.favoriteButton:hover {
+  background: #eeaeb8;
+}
+
+.favoriteButton img {
+  padding-top: 10px;
+  width: 80%;
+  height: 80%;
+}
+
 .mobileHeading {
   flex-shrink: 0;
   margin: 47px 0 0 0;
