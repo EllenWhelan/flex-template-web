@@ -19,6 +19,12 @@ export const QUERY_REVIEWS_REQUEST = 'app/ProfilePage/QUERY_REVIEWS_REQUEST';
 export const QUERY_REVIEWS_SUCCESS = 'app/ProfilePage/QUERY_REVIEWS_SUCCESS';
 export const QUERY_REVIEWS_ERROR = 'app/ProfilePage/QUERY_REVIEWS_ERROR';
 
+export const ADD_TO_FAVORITE_SUCCESS = 'app/ProfilePage/ADD_TO_FAVORITE_SUCCESS';
+export const ADD_TO_FAVORITE_ERROR = 'app/ProfilePage/ADD_TO_FAVORITE_SUCCESS';
+export const REMOVE_FROM_FAVORITE_SUCCESS = 'app/ProfilePage/REMOVE_FROM_FAVORITE_SUCCESS';
+export const REMOVE_FROM_FAVORITE_ERROR = 'app/ProfilePage/REMOVE_FROM_FAVORITE_ERROR';
+export const SET_FAVORITE_STATUS = 'app/ProfilePage/SET_FAVORITE_STATUS';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -28,6 +34,9 @@ const initialState = {
   queryListingsError: null,
   reviews: [],
   queryReviewsError: null,
+  isFavorite: {
+    status: null
+  }
 };
 
 export default function profilePageReducer(state = initialState, action = {}) {
@@ -61,6 +70,20 @@ export default function profilePageReducer(state = initialState, action = {}) {
       return { ...state, reviews: payload };
     case QUERY_REVIEWS_ERROR:
       return { ...state, reviews: [], queryReviewsError: payload };
+
+    case ADD_TO_FAVORITE_SUCCESS:
+      return state
+    case ADD_TO_FAVORITE_ERROR:
+      return state
+    case REMOVE_FROM_FAVORITE_SUCCESS:
+      return state
+    case REMOVE_FROM_FAVORITE_ERROR:
+      return state
+    case SET_FAVORITE_STATUS:
+      return {
+        ...state,
+        isFavorite: payload
+      }
 
     default:
       return state;
@@ -180,5 +203,70 @@ export const loadData = userId => (dispatch, getState, sdk) => {
     dispatch(showUser(userId)),
     dispatch(queryUserListings(userId)),
     dispatch(queryUserReviews(userId)),
+    dispatch(fetchFavoriteStatus(userId.uuid))
   ]);
 };
+
+export const fetchFavoriteStatus = (minderId) => (dispatch, getState, sdk) => {
+  sdk.currentUser.show().then(res => {
+    const favoriteList = res.data.data.attributes.profile.publicData.favoritesList
+    if (favoriteList.includes(minderId)) {
+      dispatch({ type: SET_FAVORITE_STATUS, payload: { status: true } })
+    } else dispatch({ type: SET_FAVORITE_STATUS, payload: { status: false } })
+  })
+}
+
+export const addToFavorite = (minderId) => (dispatch, getState, sdk) => {
+  sdk.currentUser.show().then(res => {
+    const oldFavoritesList = res.data.data.attributes.profile.publicData.favoritesList
+    let newFavoritesList = [minderId]
+    if (oldFavoritesList) {
+      if (oldFavoritesList.includes(minderId)) {
+        newFavoritesList = oldFavoritesList
+      } else {
+        oldFavoritesList.push(minderId) 
+        newFavoritesList = oldFavoritesList
+      }
+    }
+    return newFavoritesList
+  }).then(newFavoritesList => {
+    sdk.currentUser.updateProfile({
+      publicData: {
+        favoritesList: newFavoritesList
+      }
+    }).then(() => {
+      dispatch({ type: SET_FAVORITE_STATUS, payload: { status: true } })
+      dispatch({ type: ADD_TO_FAVORITE_SUCCESS })
+    }).catch((err) => {
+      console.log(`error message: ${err}`)
+      dispatch({ type: ADD_TO_FAVORITE_ERROR })
+    })
+  }).then(() => {
+  }).catch(err => {
+    console.log(`error message: ${err}`)
+    dispatch({ type: ADD_TO_FAVORITE_ERROR })
+  })
+}
+
+export const removeFromFavorite = (minderId) => (dispatch, getState, sdk) => {
+  sdk.currentUser.show().then(res => {
+    const favoritesList = res.data.data.attributes.profile.publicData.favoritesList
+    if (favoritesList.includes(minderId)) {
+      const filteredList = favoritesList.filter(id => id !== minderId)
+      sdk.currentUser.updateProfile({
+        publicData: {
+          favoritesList: filteredList
+        }
+      }).then(res => {
+        dispatch({ type: SET_FAVORITE_STATUS, payload: { status: false } })
+        dispatch({ type: REMOVE_FROM_FAVORITE_SUCCESS })
+      }).catch(err => {
+        console.log(`error message: ${err}`)
+        dispatch({ type: REMOVE_FROM_FAVORITE_ERROR })
+      })
+    }
+  }).catch(err => {
+    console.log(`error message: ${err}`)
+    dispatch({ type: REMOVE_FROM_FAVORITE_ERROR })
+  })
+}

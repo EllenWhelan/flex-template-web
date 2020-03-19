@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { getFavoriteListings } from './FavoritesPage.duck';
-import { getListingsById } from '../../ducks/marketplaceData.duck';
+import { getFavoriteMinders } from './FavoritesPage.duck';
 import { TopbarContainer } from '../../containers';
 import {
   LayoutSingleColumn,
@@ -11,18 +10,18 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
-  SearchResultsPanel
+  UserCard
 } from '../../components';
 
 
 class FavoritesPage extends Component {
     componentDidMount() {
-        const { getFavoriteListings } = this.props
-        getFavoriteListings()
+        const { getFavoriteMinders } = this.props
+        getFavoriteMinders()
     }
 
     render() {
-        const { listings } = this.props
+        const { favoriteMinders } = this.props
         return (
             <LayoutSingleColumn>
                 <LayoutWrapperTopbar>
@@ -31,9 +30,9 @@ class FavoritesPage extends Component {
     
                 <LayoutWrapperMain>
                     <h1>Favorite Minders</h1>
-                    <SearchResultsPanel
-                        listings={listings}
-                    />
+                    { favoriteMinders.map(minder => {
+                        return <UserCard user={minder} key={minder.id.uuid} />
+                    }) }
                 </LayoutWrapperMain>
     
                 <LayoutWrapperFooter>
@@ -45,16 +44,15 @@ class FavoritesPage extends Component {
 }
 
 const mapStateToProps = state => {
-    const { favoriteListingIds } = state.FavoritesPage
-    const listings = getListingsById(state, favoriteListingIds)
+    const { favoriteMinders } = state.FavoritesPage
     return {
-        listings
+        favoriteMinders
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getFavoriteListings: () => dispatch(getFavoriteListings())
+        getFavoriteMinders: () => dispatch(getFavoriteMinders())
     }
 }
   
