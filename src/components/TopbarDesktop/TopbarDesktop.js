@@ -106,6 +106,15 @@ const TopbarDesktop = props => {
             <FormattedMessage id="TopbarDesktop.accountSettingsLink" />
           </NamedLink>
         </MenuItem>
+        <MenuItem key="FavoritesPage">
+          <NamedLink
+            className={classNames(css.favoritesLink, currentPageClass('FavoritesPage'))}
+            name="FavoritesPage"
+          >
+            <span className={css.menuItemBorder} />
+            <FormattedMessage id="TopbarDesktop.favoritesLink" defaultMessage="Favorites" />
+          </NamedLink>
+        </MenuItem>
         <MenuItem key="logout">
           <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
             <span className={css.menuItemBorder} />

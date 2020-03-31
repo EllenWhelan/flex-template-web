@@ -110,6 +110,12 @@ const TopbarMobileMenu = props => {
         >
           <FormattedMessage id="TopbarMobileMenu.accountSettingsLink" />
         </NamedLink>
+        <NamedLink
+          className={classNames(css.navigationLink, currentPageClass('FavoritesPage'))}
+          name="FavoritesPage"
+        >
+          <FormattedMessage id="TopbarMobileMenu.favoritesLink" defaultMessage="Favorites" />
+        </NamedLink>
       </div>
       <div className={css.footer}>
         <NamedLink className={css.createNewListingLink} name="NewListingPage">

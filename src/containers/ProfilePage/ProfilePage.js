@@ -23,9 +23,10 @@ import {
   ListingCard,
   Reviews,
   ButtonTabNavHorizontal,
+  PrimaryButton
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
-import { loadData } from './ProfilePage.duck';
+import { loadData, addToFavorite, removeFromFavorite } from './ProfilePage.duck';
 import config from '../../config';
 
 import css from './ProfilePage.css';
@@ -70,6 +71,9 @@ export class ProfilePageComponent extends Component {
       queryReviewsError,
       viewport,
       intl,
+      addToFavorite,
+      removeFromFavorite,
+      isFavorite
     } = this.props;
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
     const profileUser = ensureUser(user);
@@ -92,9 +96,28 @@ export class ProfilePageComponent extends Component {
       </NamedLink>
     ) : null;
 
+    const handleFavoriteAdd = () => {
+      addToFavorite(user.id.uuid)
+    }
+
+    const handleFavoriteRemove = () => {
+      removeFromFavorite(user.id.uuid)
+    }
+
     const asideContent = (
       <div className={css.asideContent}>
         <AvatarLarge className={css.avatar} user={user} disableProfileLink />
+        { isFavorite && isFavorite.status === true &&
+          <button className={css.favoriteButton} onClick={handleFavoriteRemove}>
+            <img src={ process.env.PUBLIC_URL + '/static/icons/favorite-heart-filled.png' } />
+          </button>
+        }
+        { isFavorite && isFavorite.status === false &&
+          <button className={css.favoriteButton} onClick={handleFavoriteAdd}>
+            <img src={ process.env.PUBLIC_URL + '/static/icons/favorite-heart.png' } />
+          </button>
+        }
+        
         <h1 className={css.mobileHeading}>
           {displayName ? (
             <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: displayName }} />
@@ -297,6 +320,7 @@ const mapStateToProps = state => {
     userListingRefs,
     reviews,
     queryReviewsError,
+    isFavorite
   } = state.ProfilePage;
   const userMatches = getMarketplaceEntities(state, [{ type: 'user', id: userId }]);
   const user = userMatches.length === 1 ? userMatches[0] : null;
@@ -310,11 +334,19 @@ const mapStateToProps = state => {
     listings,
     reviews,
     queryReviewsError,
+    isFavorite
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return{
+    addToFavorite: (minderId) => dispatch(addToFavorite(minderId)),
+    removeFromFavorite: (minderId) => dispatch(removeFromFavorite(minderId))
+  }
+}
+
 const ProfilePage = compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withViewport,
   injectIntl
 )(ProfilePageComponent);

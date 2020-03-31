@@ -1,0 +1,14 @@
+@import '../../marketplace.css';
+
+.favoriteMinderList {
+    margin: 30px 17% 50px 17%;
+}
+
+.favoriteMinderList h1 {
+    color: #3BE6E2;
+    text-align: center;
+}
+
+.userCard {
+    margin: 20px 0;
+}
