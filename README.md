@@ -5,6 +5,7 @@ The project focused on developing extra features for oogo, a childcare marketpla
 
 Our project focused on additional features not included in sharetribe flex's framework, essentially further customising sharetribe for oogo. This repository includes the 'favourite feature'. This feature allowed users to 'favourite' minders by clicking a button on the minders profile page. The users 'favourites' were saved to the users profile and they can access them to search by their favourites. 
 
+The second part of this project can be found [here](https://github.com/EllenWhelan/link).
 ## Quick Start Guide 
 To get started simply clone this repository and follow the instructions below.
 
