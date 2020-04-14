@@ -210,9 +210,19 @@ export const loadData = userId => (dispatch, getState, sdk) => {
 export const fetchFavoriteStatus = (minderId) => (dispatch, getState, sdk) => {
   sdk.currentUser.show().then(res => {
     const favoriteList = res.data.data.attributes.profile.publicData.favoritesList
-    if (favoriteList.includes(minderId)) {
+    if (!favoriteList) {
+      sdk.currentUser.updateProfile({
+        ...res.data.data.attributes.profile,
+        publicData: {
+          ...res.data.data.attributes.profile.publicData,
+          favoritesList: []
+        }
+      })
+    } else if (favoriteList.includes(minderId)) {
       dispatch({ type: SET_FAVORITE_STATUS, payload: { status: true } })
-    } else dispatch({ type: SET_FAVORITE_STATUS, payload: { status: false } })
+      return
+    }
+    dispatch({ type: SET_FAVORITE_STATUS, payload: { status: false } })
   })
 }
 
